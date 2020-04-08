@@ -20,9 +20,6 @@ public class CityDaoImpl implements ICityDao {
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		String name = "";
-		int cityId = 0;
-		int cityPopulation = 0;
 
 		try {
 			conn = ConnectionFactory.getConnection();
@@ -32,10 +29,10 @@ public class CityDaoImpl implements ICityDao {
 			rs = stmt.executeQuery();
 			while (rs.next()) {
 				city = new City();
-				city.setCityId(cityId);
-				city.setCityName(rs.getString(name));
-				city.setCountryCode(rs.getString(countryCode));
-				city.setCityPopulation(cityPopulation);
+				city.setCityId(rs.getInt("ID"));
+				city.setCityName(rs.getString("Name"));
+				city.setCountryCode(rs.getString("CountryCode"));
+				city.setCityPopulation(rs.getInt("Population"));
 				cities.add(city);
 			}
 			rs.close();
@@ -62,7 +59,7 @@ public class CityDaoImpl implements ICityDao {
 	}
 
 	@Override
-	public List<City> getCitiesByNameOrCountryCode(String name, String countryCode) {
+	public List<City> searchCities(String name, String countryCode) {
 		City city = null;
 		List<City> cities = new ArrayList<>();
 		Connection conn = null;
@@ -112,47 +109,6 @@ public class CityDaoImpl implements ICityDao {
 	}
 
 	@Override
-	public Integer getMaxCityId() {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		int max = 0;
-
-		try {
-			conn = ConnectionFactory.getConnection();
-			String sql = "SELECT MAX(id) AS maximum FROM city";
-			stmt = conn.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				int maxId = Integer.parseInt(sql);
-				max = maxId;
-			}
-
-			rs.close();
-		} catch (
-
-		Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-			} catch (SQLException se2) {
-			}
-			try {
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException se) {
-				se.printStackTrace();
-			}
-		}
-
-		return max;
-	}
-
-	@Override
 	public City addOrEditCity(int newId, String newName, String newCountryCode, int newPopulation) {
 
 		City newCity = null;
@@ -164,7 +120,7 @@ public class CityDaoImpl implements ICityDao {
 
 		try {
 			conn = ConnectionFactory.getConnection();
-			String sql = "INSERT INTO city (id, name, countryCode, population) VALUES (?,?,?,?)";
+			String sql = "INSERT INTO city (name, countryCode, population) VALUES (?,?,?)";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, newId);
 			stmt.setString(2, newName);
@@ -175,7 +131,7 @@ public class CityDaoImpl implements ICityDao {
 			// while (rs.next()) {
 			if (row == 1) {
 				newCity = new City();
-				newCity.setCityId(getMaxCityId() + 1);
+				newCity.setCityId(newId);
 				newCity.setCityName(newName);
 				newCity.setCountryCode(newCountryCode);
 				newCity.setCityPopulation(newPopulation);

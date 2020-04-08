@@ -1,7 +1,6 @@
 package it.objectmethod.world.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,9 +24,9 @@ public class CityListServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<City> cities = new ArrayList<>();
+		List<City> cities = null;
 		ICityDao cityDao = new CityDaoImpl();
-		String countryCode = req.getParameter("countryCode");
+		String countryCode = req.getParameter("country");
 
 		try {
 			cities = cityDao.getCityByCountry(countryCode);
@@ -35,7 +34,6 @@ public class CityListServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		// output
 		req.setAttribute("cityList", cities);
 		req.getRequestDispatcher("pages/cityList.jsp").forward(req, resp);
 	}

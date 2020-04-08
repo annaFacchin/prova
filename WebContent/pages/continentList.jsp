@@ -14,8 +14,8 @@
 
 	<h2>Lista Continenti:</h2>
 	<br>
-		<c:forEach items="${continents}" var="continent">
-			<a href="../CountryListServlet?continent=${continent}">${continent}</a><br><br>
+		<c:forEach items="${continentList}" var="continent">
+			<a href="CountryList?chosenContinent=${continent}">${continent}</a><br><br>
 		</c:forEach>
 
 </body>

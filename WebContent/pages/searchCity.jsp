@@ -15,22 +15,14 @@
 
 	<h2>Ricerca citta</h2>
 
-	<form>
-		Nome: <input formaction="../SearchCities?name=${name}&country=${countryCode}" type="text"
-			name="name" id="name"> <br>
-		<br>Nazione: <select name="countryCode">
-		<option value="nessuna">- Nessuna Nazione</option>
-			<option value="countries">
-			<c:choose>
-				<c:when test="${countries}">
-					<c:forEach items="${countries}" var="count">${count}</c:forEach>
-				</c:when>
-				<c:otherwise>Nessuna nazione</c:otherwise>
-			</c:choose>
-			</option>
-		</select> <br>
-		<br> <input formaction="../SearchCities?name=${name}&countryCode=${country}"
-			type="submit" value="Cerca">
+	<form action="SearchCities">
+		Nome: <input type="text" name="name" id="name"> <br> <br>Nazione:
+		<select name="countryCode">
+			<option value="">- Nessuna Nazione</option>
+			<c:forEach items="${countryList}" var="count">
+				<option value="${country.code}">${country}</option>
+			</c:forEach>
+		</select> <br> <br> <input type="submit" value="Cerca">
 	</form>
 
 </body>

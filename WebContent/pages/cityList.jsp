@@ -13,15 +13,15 @@
 <body>
 	<h2>Lista Città:</h2>
 	<br>
-	<a href="searchCity.jsp">Cerca citta</a>
-	
-	<a href="../CountryListServlet?continent=${cont}">Torna alle nazioni</a><br><br>
+	<a href="searchCity.jsp">Cerca citta</a><br>
+	<a href="AddOrUpdateCity">Inserisci citta</a><br>
+	<a href="CountryList">Torna alle nazioni</a><br><br>
 
-	<c:forEach items="${cities}" var="city">
-		<li>City: ${city.name} <br>
+	<c:forEach items="${cityList}" var="city">
+		<li>City: ${city.cityName} <br>
 		Country: ${city.countryCode}<br>
-		Population: ${city.population} <br> 
-		<a href="/AddOrUpdateCity?id=${city.id}">Edit</a> 
+		Population: ${city.cityPopulation} <br> 
+		<a href="AddOrUpdateCity?id=${city.cityId}">Edit</a> 
 		</li>
 		<br><br>
 	</c:forEach>

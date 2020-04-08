@@ -15,9 +15,9 @@
 	<br>
 	${output} 
 	<br>
-		<c:forEach items="${countries}" var="country">
-			<li>Name: <a href="../CityListServlet?country=${country.name}">${country.name}</a><br>
-			Population: ${country.population}
+		<c:forEach items="${countryList}" var="country">
+			<li>Name: <a href="CityList?country=${country.code}">${country.name}</a><br>
+			Population: ${country.population}<br>
 		</c:forEach>
 
 </body>

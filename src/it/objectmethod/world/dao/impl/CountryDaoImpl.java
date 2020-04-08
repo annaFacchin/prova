@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.objectmethod.world.config.ConnectionFactory;
-import it.objectmethod.world.dao.IContinentDao;
+import it.objectmethod.world.dao.ICountryDao;
+import it.objectmethod.world.domain.Country;
 
-public class ContinentDaoImpl implements IContinentDao {
+public class CountryDaoImpl implements ICountryDao {
 
 	@Override
 	public List<String> getAllContinent() {
@@ -21,7 +22,7 @@ public class ContinentDaoImpl implements IContinentDao {
 
 		try {
 			conn = ConnectionFactory.getConnection();
-			String sql = "SELECT DISTINCT Continent FROM Country";
+			String sql = "SELECT DISTINCT Continent FROM country";
 			stmt = conn.prepareStatement(sql);
 			rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -53,21 +54,24 @@ public class ContinentDaoImpl implements IContinentDao {
 
 	// country
 	@Override
-	public List<String> getCountryByContinent(String continent) {
-		List<String> countries = new ArrayList<>();
+	public List<Country> getCountryByContinent(String continent) {
+		List<Country> countries = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
 			conn = ConnectionFactory.getConnection();
-			String sql = "SELECT * FROM Country WHERE country.Continent = ?";
+			String sql = "SELECT * FROM country WHERE country.Continent = ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, continent);
 			rs = stmt.executeQuery();
 			while (rs.next()) {
-				// attributi vari
-				countries.add(rs.getString("Continent"));
+				Country c = new Country();
+				c.setCode(rs.getString("Code"));
+				c.setName(rs.getString("Name"));
+				c.setPopulation(rs.getInt("Population"));
+				countries.add(c);
 			}
 			rs.close();
 		} catch (Exception e) {
@@ -90,5 +94,46 @@ public class ContinentDaoImpl implements IContinentDao {
 		System.out.println(countries);
 		return countries;
 
+	}
+
+	@Override
+	public List<Country> getAllCountries() {
+		List<Country> countries = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = ConnectionFactory.getConnection();
+			String sql = "SELECT * FROM country";
+			stmt = conn.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Country c = new Country();
+				c.setCode(rs.getString("Code"));
+				c.setName(rs.getString("Name"));
+				c.setPopulation(rs.getInt("Population"));
+				countries.add(c);
+			}
+			rs.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (stmt != null) {
+					stmt.close();
+				}
+			} catch (SQLException se2) {
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		System.out.println(countries);
+		return countries;
 	}
 }
